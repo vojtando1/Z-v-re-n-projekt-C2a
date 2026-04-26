@@ -8,6 +8,7 @@ public class CatchGame extends JPanel implements KeyListener {
 
     int playerX = 200;
     int score = 0;
+    int lives = 3;
 
     ArrayList<Rectangle> objects = new ArrayList<>();
     Random rand = new Random();
@@ -29,6 +30,7 @@ public class CatchGame extends JPanel implements KeyListener {
             }
 
 
+
             Rectangle player = new Rectangle(playerX, 550, 80, 10);
 
             Iterator<Rectangle> it = objects.iterator();
@@ -39,7 +41,12 @@ public class CatchGame extends JPanel implements KeyListener {
                     score++;
                     it.remove();
                 }
+                if (r.y > 600) {
+                    lives--;
+                    it.remove();
+                }
             }
+
 
             repaint();
         });
@@ -57,6 +64,7 @@ public class CatchGame extends JPanel implements KeyListener {
             g.fillRect(r.x, r.y, 20, 20);
         }
         g.drawString("Score: " + score, 10, 20);
+        g.drawString("Lives: " + lives, 10, 40);
 
     }
 
