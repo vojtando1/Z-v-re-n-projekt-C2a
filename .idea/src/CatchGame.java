@@ -24,13 +24,9 @@ public class CatchGame extends JPanel implements KeyListener {
                 objects.add(new Rectangle(rand.nextInt(380), 0, 20, 20));
             }
 
-            // pohyb
             for (Rectangle r : objects) {
                 r.y += 5;
             }
-
-
-
             Rectangle player = new Rectangle(playerX, 550, 80, 10);
 
             Iterator<Rectangle> it = objects.iterator();
@@ -41,15 +37,11 @@ public class CatchGame extends JPanel implements KeyListener {
                     score++;
                     it.remove();
                 }
-                if (r.y > 600) {
-                    lives--;
-                    it.remove();
-                }
             }
-
 
             repaint();
         });
+        timer.start();
     }
 
 
