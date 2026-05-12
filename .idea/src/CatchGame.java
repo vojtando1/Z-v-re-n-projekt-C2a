@@ -1,10 +1,9 @@
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
 
 public class CatchGame extends JPanel implements KeyListener {
 
@@ -32,16 +31,16 @@ public class CatchGame extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
 
-        // nastavení defaultních hodnot
         Arrays.fill(lastSpawn, -1000);
 
-        // MAIN LOOP
+        // ===== MAIN LOOP =====
         Timer timer = new Timer(30, e -> {
 
             frame++;
 
             // ===== SPAWN =====
-            if (rand.nextInt(20) == 0) {
+            // nižší frekvence spawnování
+            if (rand.nextInt(60) == 0) {
 
                 int lane = rand.nextInt(lanes.length);
 
@@ -105,6 +104,9 @@ public class CatchGame extends JPanel implements KeyListener {
 
         super.paintComponent(g);
 
+        // pozadí
+        setBackground(Color.BLACK);
+
         // hráč
         g.setColor(Color.WHITE);
         g.fillRect(playerX, 550, 80, 10);
@@ -143,8 +145,9 @@ public class CatchGame extends JPanel implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {}
 
-
+    // ===== MAIN =====
     public static void main(String[] args) {
+
         JFrame frame = new JFrame("Catch Game");
 
         CatchGame game = new CatchGame();
