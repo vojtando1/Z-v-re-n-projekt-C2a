@@ -1,81 +1,160 @@
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
 public class CatchGame extends JPanel implements KeyListener {
 
+    // hráč
     int playerX = 200;
+
+    // score + životy
     int score = 0;
     int lives = 3;
 
-    ArrayList<Rectangle> objects = new ArrayList<>();
+    // herní objekty
+    ArrayList<GameObject> objects = new ArrayList<>();
+
     Random rand = new Random();
 
+    // balanced spawn lanes
+    int[] lanes = {20, 100, 180, 260, 340};
+
+    // anti-spawn systém
+    int[] lastSpawn = new int[lanes.length];
+    int frame = 0;
+
     public CatchGame() {
+
         setFocusable(true);
         addKeyListener(this);
 
+        // nastavení defaultních hodnot
+        Arrays.fill(lastSpawn, -1000);
 
+        // MAIN LOOP
         Timer timer = new Timer(30, e -> {
 
+            frame++;
+
+            // ===== SPAWN =====
             if (rand.nextInt(20) == 0) {
-                objects.add(new Rectangle(rand.nextInt(380), 0, 20, 20));
+
+                int lane = rand.nextInt(lanes.length);
+
+                // balanced spawn
+                if (frame - lastSpawn[lane] > 20) {
+
+                    lastSpawn[lane] = frame;
+
+                    if (rand.nextBoolean())
+                        objects.add(new PositiveObject(lanes[lane]));
+                    else
+                        objects.add(new NegativeObject(lanes[lane]));
+                }
             }
 
-            for (Rectangle r : objects) {
-                r.y += 5;
+            // ===== UPDATE =====
+            for (GameObject obj : objects) {
+                obj.update();
             }
+
+            // ===== KOLIZE =====
             Rectangle player = new Rectangle(playerX, 550, 80, 10);
 
-            Iterator<Rectangle> it = objects.iterator();
-            while (it.hasNext()) {
-                Rectangle r = it.next();
+            Iterator<GameObject> it = objects.iterator();
 
-                if (r.intersects(player)) {
-                    score++;
+            while (it.hasNext()) {
+
+                GameObject obj = it.next();
+
+                // chycení objektu
+                if (obj.getBounds().intersects(player)) {
+
+                    if (obj instanceof PositiveObject)
+                        score++;
+
+                    if (obj instanceof NegativeObject)
+                        lives--;
+
+                    it.remove();
+                }
+
+                // objekt propadl
+                else if (obj.y > 600) {
+
+                    if (obj instanceof PositiveObject)
+                        lives--;
+
                     it.remove();
                 }
             }
 
             repaint();
         });
+
         timer.start();
     }
 
-
+    // ===== VYKRESLENÍ =====
+    @Override
     protected void paintComponent(Graphics g) {
+
         super.paintComponent(g);
 
         // hráč
+        g.setColor(Color.WHITE);
         g.fillRect(playerX, 550, 80, 10);
 
         // objekty
-        for (Rectangle r : objects) {
-            g.fillRect(r.x, r.y, 20, 20);
+        for (GameObject obj : objects) {
+            obj.draw(g);
         }
+
+        // UI
+        g.setColor(Color.WHITE);
         g.drawString("Score: " + score, 10, 20);
         g.drawString("Lives: " + lives, 10, 40);
 
+        // game over
+        if (lives <= 0) {
+            g.setColor(Color.RED);
+            g.drawString("GAME OVER", 160, 300);
+        }
     }
 
+    // ===== OVLÁDÁNÍ =====
+    @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) playerX -= 20;
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) playerX += 20;
+
+        if (e.getKeyCode() == KeyEvent.VK_LEFT)
+            playerX -= 20;
+
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+            playerX += 20;
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {}
+
+    @Override
     public void keyTyped(KeyEvent e) {}
 
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Catch Game");
+
         CatchGame game = new CatchGame();
 
         frame.add(game);
+
         frame.setSize(400, 600);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         frame.setVisible(true);
     }
 }

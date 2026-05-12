@@ -2,10 +2,11 @@ import java.awt.*;
 
 class PositiveObject extends GameObject {
 
-    PositiveObject(int x) {
-        this.x = x; this.y = 0;
+    public PositiveObject(int x) {
+        super(x, 0);
     }
 
+    @Override
     void update() {
         y += speed;
     }
