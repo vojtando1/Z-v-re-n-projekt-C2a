@@ -147,17 +147,6 @@ public class CatchGame extends JPanel implements KeyListener {
 
     // ===== MAIN =====
     public static void main(String[] args) {
-
-        JFrame frame = new JFrame("Catch Game");
-
-        CatchGame game = new CatchGame();
-
-        frame.add(game);
-
-        frame.setSize(400, 600);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.setVisible(true);
+        new GamePanel();
     }
 }
