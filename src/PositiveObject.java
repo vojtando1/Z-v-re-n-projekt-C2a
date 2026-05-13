@@ -1,8 +1,8 @@
 import java.awt.*;
 
-class NegativeObject extends GameObject {
+public class PositiveObject extends GameObject {
 
-    public NegativeObject(int x) {
+    public PositiveObject(int x) {
         super(x, 0);
     }
 
@@ -13,7 +13,7 @@ class NegativeObject extends GameObject {
 
     @Override
     void draw(Graphics g) {
-        g.setColor(Color.RED);
+        g.setColor(Color.GREEN);
         g.fillRect(x, y, 20, 20);
     }
 }

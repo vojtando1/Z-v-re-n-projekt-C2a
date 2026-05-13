@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class GamePanel extends JFrame {
 
-    public GamePanel () {
+    public GamePanel() {
 
         setTitle("Catch Game");
         setSize(400, 600);

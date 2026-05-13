@@ -155,13 +155,10 @@ public class CatchGame extends JPanel implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+    }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
-
-    // ===== MAIN =====
-    public static void main(String[] args) {
-        new GamePanel();
+    public void keyTyped(KeyEvent e) {
     }
 }
