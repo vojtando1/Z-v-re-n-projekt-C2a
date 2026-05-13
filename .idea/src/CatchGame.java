@@ -7,6 +7,8 @@ import java.util.*;
 
 public class CatchGame extends JPanel implements KeyListener {
 
+    boolean gameOver = false;
+
     // hráč
     int playerX = 200;
 
@@ -91,6 +93,9 @@ public class CatchGame extends JPanel implements KeyListener {
                     it.remove();
                 }
             }
+            if (lives <= 0) {
+                gameOver = true;
+            }
 
             repaint();
         });
@@ -122,9 +127,16 @@ public class CatchGame extends JPanel implements KeyListener {
         g.drawString("Lives: " + lives, 10, 40);
 
         // game over
-        if (lives <= 0) {
+        if (gameOver) {
+
             g.setColor(Color.RED);
-            g.drawString("GAME OVER", 160, 300);
+            g.setFont(new Font("Arial", Font.BOLD, 30));
+
+            g.drawString("GAME OVER", 100, 250);
+
+            g.setFont(new Font("Arial", Font.PLAIN, 20));
+
+            g.drawString("Final Score: " + score, 120, 300);
         }
     }
 
@@ -137,6 +149,9 @@ public class CatchGame extends JPanel implements KeyListener {
 
         if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             playerX += 20;
+
+        if (gameOver)
+            return;
     }
 
     @Override
